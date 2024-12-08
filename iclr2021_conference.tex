@@ -8,12 +8,17 @@
 \usepackage{hyperref}
 \usepackage{url}
 
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+
 
 \title{Genmo Combo:\\
 Bridging Mental Health, Genetics, and Clinical Trials with LLM and Sentiment Analysis
 }
 
-\author{Tingyu Liu\\ School of Computational Science and Engineering\\Georgia Tech\\ \\  \url{tliu479@gatech.edu} \\ \\ \href{https://github.com/taraliu23/Turmerik-MLE-Takehome}{Project GitHub Repository}}
+\author{Tingyu Liu\\ School of Computational Science and Engineering\\Georgia Tech\\ \\  \url{tliu479@gatech.edu} \\ \\ \href{https://github.com/taraliu23/Turmerik-MLE-Takehome}{GitHub Repository}}
 
 
 \newcommand{\fix}{\marginpar{FIX}}
@@ -27,9 +32,7 @@ Bridging Mental Health, Genetics, and Clinical Trials with LLM and Sentiment Ana
 \begin{abstract}
 Patients with co-occurring mental health disorders and genetic conditions face significant challenges in accessing resources, navigating clinical trials, and receiving personalized care. This project addresses these gaps by developing a WebApp that integrates sentiment analysis and Retrieval-Augmented Generation (RAG) to provide trustworthy, contextually relevant information.
 
-The study leverages subreddit discussions to analyze public sentiment and uses these insights to inform the design of an interactive Q&A chat interface and a static knowledge hub. The WebApp empowers users, especially those without a research background, to access curated resources and answers to their queries. Sentiment analysis revealed pervasive frustrations and gaps in existing support systems, emphasizing the need for patient-centered tools.
-
-The results demonstrate the potential of RAG-enhanced language models to minimize hallucinations and provide accurate responses, as validated through a 50-question simulated Q&A evaluation. While the current implementation focuses on foundational functionalities, future enhancements will include personalized recommendations, advanced clinical trial search, and robust privacy features.
+The study leverages subreddit discussions to analyze public sentiment and uses these insights to inform the design of an interactive Q&A chat interface and a static knowledge hub. The WebApp empowers users, especially those without a research background, to access curated resources and answers to their queries. Sentiment analysis revealed pervasive frustrations and gaps in existing support systems, emphasizing the need for patient-centered tools.The results demonstrate the potential of RAG-enhanced language models to minimize hallucinations and provide accurate responses, as validated through a 50-question simulated Q&A evaluation. While the current implementation focuses on foundational functionalities, future enhancements will include personalized recommendations, advanced clinical trial search, and robust privacy features.
 
 This work highlights the transformative role of AI in bridging healthcare accessibility gaps, particularly for underserved populations. By combining advanced computational methods with patient-centric design, the project sets the stage for a comprehensive platform that addresses the unique needs of individuals with genetic-linked mental disorders.
 
@@ -39,102 +42,116 @@ This work highlights the transformative role of AI in bridging healthcare access
 
 \subsection{Background}
 
-Mental disorders (eg. depression, anxiety) are the result of a combination of environment and genetic variation.
 
-Mental disorders, such as depression and anxiety, arise from a complex interplay of environmental factors and genetic variations. These conditions are not only prevalent but also highly impactful, often affecting individuals’ quality of life and productivity. Recent advances in genetics and computational tools have highlighted the potential to personalize mental health care. However, patients with co-occurring mental health and genetic disorders face unique challenges in accessing support and resources.
-
-\subsection{Motivation}
-
-Assist patients with mental health and genetic disorders in finding: Self-help resources, Appropriate clinical trials, and Provide accessible tools, especially for those without a research background.
-
-This study seeks to address the unmet needs of patients with mental health and genetic disorders by:
-
-Providing Self-Help Resources: Empowering patients to take proactive steps in managing their conditions.
-Facilitating Access to Clinical Trials: Helping patients identify appropriate clinical trials tailored to their unique genetic and mental health profiles.
-Improving Accessibility: Developing tools that cater to patients without a research or medical background, thereby bridging the knowledge gap.
+Mental disorders, such as depression and anxiety, are caused by a compound influence of environmental and genetic factors \citep{alshaya2022depression}. All major psychiatric disorders have genetic risk factors, and genetic strategies are frequently employed to evaluate possible overlaps. 
 
 
-Despite advancements in research and technology, patients with genetic-linked mental disorders encounter several obstacles:
+For example, common genetics variation single nucleotide polymorphisms (SNPs) appeared more frequently in individuals with five prevalent mental disorders: autism spectrum disorder (ASD), attention deficit-hyperactivity disorder (ADHD), bipolar disorder, major depressive disorder, and schizophrenia \citep{Cross-Disorder}. 
 
-Exclusion and Lack of Resources:
 
-Many patients feel overwhelmed and unsupported in navigating the complex healthcare landscape.
-Exclusion Criteria: Individuals with genetic disorders are often excluded from mental health trials, further limiting their treatment options.
-Barriers to Access:
-Procedural: Clinical trials often fail to generalize findings to individual cases.
-Economic: Costs related to genetics testing and counseling are frequently excluded from insurance coverage.
-Clinician Awareness: Limited knowledge, misconceptions about cost-effectiveness, and lack of training hinder clinicians from recommending genetic resources.
-Ethical Concerns: Stigmatization and exclusion from essential health services exacerbate the challenges for these patients.
-Trust and Safety Issues:
-
-Ethics Errors: Large language models (LLMs) such as ChatGPT often refuse valid health-related queries due to overzealous ethical safeguards, leaving patients without critical information.
-Security Concerns: Risks associated with commercial LLMs, including data privacy and misuse, further erode trust in these tools.
 
 \subsection{Problem Statement}
 
-\begin{itemize}
-    \item Exclusion and Lack of resources.
-        Overwhelmed and Unsupported patients 
-        Exclusion Criteria: Patients with genetic disorders often excluded from mental health trials.
-        Barriers to Access:
-        Procedural
-        Economic
-        Clinician Awareness
-        Ethical Concerns
+Patients with co-occuring genetic diseases and mental disorders experience a set of interconnected challenges, including healthcare inequity, social stigma, and privacy concerns.
 
-    \item Trust and Safety
+They must navigate the diagnostic difficulties associated with both conditions, where genetic diseases with long and costly diagnostic process \citep{Breining_2018} and  mental  disorder with misdiagnosis issues. 
 
-    Ethics Errors: ChatGPT refuses to provide answers to valid health-related questions due to ethical restrictions.
-Security Concerns: Risks associated with commercial LLMs like ChatGPT.
+They are often excluded from mental health trials, further limiting their treatment options. Additionally, a significant proportion of mental disorder clinical trials exclude individuals with additional medical conditions. 
 
-    
+The limited treatment options for genetic conditions combined with barriers to accessing mental healthcare create a compound effect on their healthcare management, which could further lead to financial instability, creating a cyclical pattern of hardship.
+
+These individuals also bear a double burden of social stigma and face discrimination \citep{Barriers}, leading to potential isolation, anxiety, and depression from both conditions along with physical symptoms of their genetic disease.
+
+The use of Large Language Models (LLMs) in mental health care and genetic disease management depend on heavily user-genrerated prompts, and could be inherent biased. Hallucinations and inaccuries in answer would lead to serious consquence. Also, Large language models (LLMs) such as ChatGPT often refuse valid health-related queries due to overzealous ethical safeguards, leaving patients without critical information \citep{Guo_2024}.
+
+\subsection{Motivation}
 
 
+This project aim to address the needs of patients with co-occurring mental health and genetic disorders by providing self-help resources, facilitating access in clinical trials and improving knowledge accessibility.
 
-\end{itemize}
+Providing Self-Help Resources: Empowering patients to take proactive steps in managing their conditions.
+
+Facilitating Access to Clinical Trials: Helping patients identify appropriate clinical trials tailored to their unique genetic and mental health profiles.
+
+Improving Accessibility: Developing tools that cater to patients without a research or medical background, thereby bridging the knowledge gap.
 
 
 % to cite: use \citet{Bengio+chapter2007} or \citep{Hinton06}
 
 \section{Literature Survey}
 
-Existing tools focus on clinical databases and fail to address:
-Patient needs and sentiments
-Specific mental health-genetic disorder resources
-Open-source implementation
+\subsection{Applications of LLMs in mental health care}
 
-Example Study:Boosting GPT Models for Genomics Analysis[9]
-Generates trusted genetic variant annotations and interpretations through Retrieval-Augmented Generation (RAG) and fine-tuning.
+Diagnosis: LLMs assist in identifying mental health conditions by analyzing patient data and clinical notes.
 
-Existing tools primarily focus on leveraging clinical databases, but they lack the ability to address key issues, such as:
+Therapy: They support therapeutic interventions through chatbots and virtual agents, providing cognitive behavioral therapy and other therapeutic modalities.
+
+Patient Engagement: LLMs enhance patient engagement by facilitating communication and providing psycho-education.
+
+\subsection{Models for LLMs in mental disorder-genetics disease}
+
+Before 2023, the most common LLMs used for mental health disease detection are GPT-3 (\citet{10079554}, \citet{10.1145/3544549.3585614}) and BERT(\citet{Diniz_Fontenele_de2022},\citet{Tanana_Soma_Kuo_Bertagnolli_Dembe_Pace_Srikumar_Atkins_Imel_2021}). In 2023 and 2024, the LLMs become diverserse, including ChatGPT 4.0\citep{BLEASE2024115724}, bing AI, Claude, Bard\citep{Elyoseph_Levkovich_Shinan-Altman_2024}, and open source models like LlaA-7B, ChatGLM-6b\citet{10263217}.
+
+\subsection{Current Challenges for LLM in mental disorder and genetics disease}
+
+
+LLMs have been tested and, to a limited degree, implemented in a variety of medical applications. There are some studies showing that LLMs perform better than human physicians in terms of the responses that patients prefer. However, there is ample evidence of LLMs' shortcomings in mental health counseling\citet{chung2023challengeslargelanguagemodels}.
+
+Challenges of LLMs for mental health and genetics diesease counseling include model hellucination, interpretebility of AI, electronics health records, bias
+
+Ethical worries include the lack of a well-defined, industry-standard ethical structure; issues related to data privacy; and the possibility that patients and doctors will rely too much on LLMs, risking conventional medical procedures. 
+
+
+
+\subsection{Case Study}
+
+
+A notable example is Boosting GPT Models for Genomics Analysis [9], which demonstrates the application of Retrieval-Augmented Generation (RAG) for generating trusted genetic variant annotations and interpretations. While promising, this approach does not integrate patient-specific needs or mental health aspects, highlighting the gap this study aims to address.
+
+
+Existing tools primarily focus on leveraging clinical databases, but they lack the ability to address key issues, such as patient sentiments, tailored resources, and open source implementation.
 
 Patient Needs and Sentiments: Current systems do not consider the emotional and informational needs of patients, particularly those with genetic-linked mental disorders.
+
 Tailored Resources: There is an absence of resources specifically designed for individuals with co-occurring genetic and mental health conditions.
+
 Open-Source Implementation: Most existing solutions are proprietary, limiting accessibility and scalability.
-Example Study:
-A notable example is Boosting GPT Models for Genomics Analysis [9], which demonstrates the application of Retrieval-Augmented Generation (RAG) for generating trusted genetic variant annotations and interpretations. While promising, this approach does not integrate patient-specific needs or mental health aspects, highlighting the gap this study aims to address.
+
+
 
 \section{Method}
 
-
+\begin{figure}[h]
+\begin{center}
+%\framebox[4.0in]{$\;$}
+\includegraphics[width=\textwidth]{fig/workflow.png}
+% \fbox{\rule[-.5cm]{0cm}{4cm} \rule[-.5cm]{4cm}{0cm}}
+\end{center}
+\caption{Workflow}
+\end{figure}
 
 \subsection{Retrieval-Augmented Generation (RAG)}
 
-Sentiment Analysis with Transformers 
-Retrieval-Augmented Generation(RAG) with Llama2 cpp
-RAG > Fine-tune
-less likely to “hallucinate”
-control on hallucination
-keep the LLM fixed and unmodified
+This project uses Retrieval-Augmented Generation (RAG) to improve the accuracy and reliability of LLM (Llama-2-7B-Chat\citet{touvron2023llama2openfoundation}) outputs while addressing patient-specific needs. 
 
-This study employs RAG to improve the accuracy and reliability of LLM outputs while addressing patient-specific needs. The methodology includes:
+Llama 2 is a collection of pretrained and fine-tuned generative text models ranging in scale from 7 billion to 70 billion parameters.
+
+The method includes:
 
 Sentiment Analysis with Transformers: Using state-of-the-art models to analyze patient sentiment and identify emotional or informational gaps.
+
 RAG Implementation with Llama2-cpp: Integrating RAG to enhance retrieval capabilities, ensuring that LLM outputs are grounded in relevant, trusted data.
+
 Fine-Tuning and Hallucination Control:
 Fine-tuning LLMs with domain-specific data minimizes the likelihood of generating hallucinated information.
+
 Keeping the LLM fixed while employing retrieval ensures the integrity and reliability of generated content.
+
 By combining sentiment analysis with RAG, this approach prioritizes patient needs while maintaining control over the accuracy and relevance of the model's outputs.
+
+\subsection{Data}
+
+
 
 \section{Result and Conclusion}
 
@@ -220,13 +237,7 @@ Use analytics to identify gaps and prioritize updates.
 
 
 
-\begin{figure}[h]
-\begin{center}
-%\framebox[4.0in]{$\;$}
-\fbox{\rule[-.5cm]{0cm}{4cm} \rule[-.5cm]{4cm}{0cm}}
-\end{center}
-\caption{Sample figure caption.}
-\end{figure}
+
 
 \section{Conclusion}
 
